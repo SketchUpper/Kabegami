@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="178dp"
+    android:background="?selectable_drawable">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_background">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:background="@drawable/gradient" />
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/TextAppearance.Regular.Body1.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:padding="8dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="-4dp"
+            android:maxLines="2"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowColor="@color/textColorPrimaryLight"
+            android:shadowRadius="4"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            tools:text="Sample name"/>
+
+    </FrameLayout>
+
+</FrameLayout>

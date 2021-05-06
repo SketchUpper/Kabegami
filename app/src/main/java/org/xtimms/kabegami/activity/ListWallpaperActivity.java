@@ -1,22 +1,18 @@
 package org.xtimms.kabegami.activity;
 
-import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -29,8 +25,9 @@ import com.squareup.picasso.Picasso;
 import org.xtimms.kabegami.Common;
 import org.xtimms.kabegami.R;
 import org.xtimms.kabegami.holder.ListWallpaperViewHolder;
-import org.xtimms.kabegami.interfaces.OnItemClickListener;
 import org.xtimms.kabegami.model.WallpaperItem;
+
+import java.util.Objects;
 
 public class ListWallpaperActivity extends AppCompatActivity {
 
@@ -49,27 +46,15 @@ public class ListWallpaperActivity extends AppCompatActivity {
         toolbar.setTitle(Common.STR_CATEGORY_SELECTED);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         loadBackgroundList();
-    }
-
-    public void enableTransparentStatusBar(@ColorRes int color) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = getWindow();
-            window.getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            if (color != 0) {
-                window.setStatusBarColor(ContextCompat.getColor(this, color));
-            }
-        }
     }
 
     private void loadBackgroundList() {
@@ -89,14 +74,14 @@ public class ListWallpaperActivity extends AppCompatActivity {
                         .into(listWallpaperViewHolder.wallpaper, new Callback() {
                             @Override
                             public void onSuccess() {
-
+                                listWallpaperViewHolder.progressBar.setVisibility(View.GONE);
                             }
-
                             @Override
                             public void onError(Exception e) {
+                                listWallpaperViewHolder.progressBar.setVisibility(View.GONE);
                                 Picasso.get()
                                         .load(wallpaperItem.getImageLink())
-                                        .error(R.drawable.ic_baseline_error_outline_24)
+                                        .error(R.drawable.ic_error)
                                         .into(listWallpaperViewHolder.wallpaper, new Callback() {
                                             @Override
                                             public void onSuccess() {
@@ -111,14 +96,11 @@ public class ListWallpaperActivity extends AppCompatActivity {
                             }
                         });
 
-                listWallpaperViewHolder.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        Intent intent = new Intent(ListWallpaperActivity.this, ViewWallpaperActivity.class);
-                        Common.selectBackground = wallpaperItem;
-                        Common.selectBackgroundKey = adapter.getRef(position).getKey();
-                        startActivity(intent);
-                    }
+                listWallpaperViewHolder.setOnItemClickListener((view, position) -> {
+                    Intent intent = new Intent(ListWallpaperActivity.this, ViewWallpaperActivity.class);
+                    Common.selectBackground = wallpaperItem;
+                    Common.selectBackgroundKey = adapter.getRef(position).getKey();
+                    startActivity(intent);
                 });
             }
 

@@ -16,15 +16,16 @@ import java.lang.ref.WeakReference;
 
 public class SaveHelper implements Target {
 
-    private Context context;
-    private WeakReference<AlertDialog> alertDialogWeakReference;
-    private WeakReference<ContentResolver> contentResolverWeakReference;
-    private String name, desc;
+    private final Context context;
+    private final WeakReference<AlertDialog> alertDialogWeakReference;
+    private final WeakReference<ContentResolver> contentResolverWeakReference;
+    private final String name;
+    private final String desc;
 
     public SaveHelper(Context context, AlertDialog alertDialog, ContentResolver contentResolver, String name, String desc) {
         this.context = context;
-        this.alertDialogWeakReference = new WeakReference<AlertDialog>(alertDialog);
-        this.contentResolverWeakReference = new WeakReference<ContentResolver>(contentResolver);
+        this.alertDialogWeakReference = new WeakReference<>(alertDialog);
+        this.contentResolverWeakReference = new WeakReference<>(contentResolver);
         this.name = name;
         this.desc = desc;
     }

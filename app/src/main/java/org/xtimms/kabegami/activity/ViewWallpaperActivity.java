@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
@@ -55,10 +57,9 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class ViewWallpaperActivity extends AppCompatActivity {
+public class ViewWallpaperActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    FloatingActionButton floatingActionButton;
+    BottomAppBar bottomAppBar;
     ImageView imageView;
     CoordinatorLayout rootLayout;
 
@@ -99,13 +100,14 @@ public class ViewWallpaperActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        bottomAppBar = findViewById(R.id.bottom_navigation);
+        bottomAppBar.setOnMenuItemClickListener(this);
+
         compositeDisposable = new CompositeDisposable();
         LocalDatabase database = LocalDatabase.getInstance(this);
         recentsRepository = RecentsRepository.getInstance(RecentsDataSource.getInstance(database.recentsDAO()));
 
         rootLayout = findViewById(R.id.root);
-        collapsingToolbarLayout = findViewById(R.id.collapsing);
-        collapsingToolbarLayout.setTitle(Common.STR_CATEGORY_SELECTED);
 
         imageView = findViewById(R.id.image);
         Picasso.get()
@@ -113,16 +115,6 @@ public class ViewWallpaperActivity extends AppCompatActivity {
                 .into(imageView);
 
         addToRecents();
-
-        floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Picasso.get()
-                        .load(Common.selectBackground.getImageLink())
-                        .into(target);
-            }
-        });
 
         increaseViewCount();
     }
@@ -230,12 +222,6 @@ public class ViewWallpaperActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_view_wallpaper, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -266,5 +252,33 @@ public class ViewWallpaperActivity extends AppCompatActivity {
         Picasso.get().cancelRequest(target);
         compositeDisposable.clear();
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.download) {
+            if (ActivityCompat.checkSelfPermission(ViewWallpaperActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE}, Common.PERMISSION_REQUEST_CODE);
+                }
+            } else {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(ViewWallpaperActivity.this);
+
+                String fileName = UUID.randomUUID().toString() + ".png";
+                Picasso.get()
+                        .load(Common.selectBackground.getImageLink())
+                        .into(new SaveHelper(getBaseContext(),
+                                dialog.create(),
+                                getApplicationContext().getContentResolver(),
+                                fileName,
+                                "image"));
+            }
+        } else if (item.getItemId() == R.id.apply) {
+            Picasso.get()
+                    .load(Common.selectBackground.getImageLink())
+                    .into(target);
+        }
+        return true;
     }
 }

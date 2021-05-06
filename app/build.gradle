@@ -42,6 +42,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.0.6'
 
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'

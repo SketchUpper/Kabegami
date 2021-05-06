@@ -2,17 +2,15 @@ package org.xtimms.kabegami.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -26,7 +24,6 @@ import org.xtimms.kabegami.Common;
 import org.xtimms.kabegami.R;
 import org.xtimms.kabegami.activity.ListWallpaperActivity;
 import org.xtimms.kabegami.holder.CategoryViewHolder;
-import org.xtimms.kabegami.interfaces.OnItemClickListener;
 import org.xtimms.kabegami.model.CategoryItem;
 
 public class CategoryFragment extends Fragment {
@@ -53,18 +50,18 @@ public class CategoryFragment extends Fragment {
                 Picasso.get()
                         .load(categoryItem.getImageLink())
                         .networkPolicy(NetworkPolicy.OFFLINE)
-                        .into(categoryViewHolder.background_image, new Callback() {
+                        .into(categoryViewHolder.backgroundImage, new Callback() {
                             @Override
                             public void onSuccess() {
-
+                                categoryViewHolder.progressBar.setVisibility(View.GONE);
                             }
-
                             @Override
                             public void onError(Exception e) {
+                                categoryViewHolder.progressBar.setVisibility(View.GONE);
                                 Picasso.get()
                                         .load(categoryItem.getImageLink())
-                                        .error(R.drawable.ic_baseline_error_outline_24)
-                                        .into(categoryViewHolder.background_image, new Callback() {
+                                        .error(R.drawable.ic_error)
+                                        .into(categoryViewHolder.backgroundImage, new Callback() {
                                             @Override
                                             public void onSuccess() {
 
@@ -78,16 +75,13 @@ public class CategoryFragment extends Fragment {
                             }
                         });
 
-                categoryViewHolder.category_name.setText(categoryItem.getName());
+                categoryViewHolder.categoryName.setText(categoryItem.getName());
 
-                categoryViewHolder.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        Common.STR_CATEGORY_ID_SELECTED = adapter.getRef(position).getKey();
-                        Common.STR_CATEGORY_SELECTED = categoryItem.getName();
-                        Intent intent = new Intent(getActivity(), ListWallpaperActivity.class);
-                        startActivity(intent);
-                    }
+                categoryViewHolder.setOnItemClickListener((view, position) -> {
+                    Common.STR_CATEGORY_ID_SELECTED = adapter.getRef(position).getKey();
+                    Common.STR_CATEGORY_SELECTED = categoryItem.getName();
+                    Intent intent = new Intent(getActivity(), ListWallpaperActivity.class);
+                    startActivity(intent);
                 });
             }
 

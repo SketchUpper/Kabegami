@@ -10,18 +10,6 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize"/>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?colorPrimary"
-        app:itemIconTint="@drawable/selector_bottombar"
-        app:itemTextColor="@drawable/selector_bottombar"
-        app:menu="@menu/bottom_navigation_menu"
-        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"/>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

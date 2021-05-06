@@ -12,15 +12,13 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:theme="@style/Theme.Kabegami.AppBarOverlay">
+        android:fitsSystemWindows="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/Theme.Kabegami.PopupOverlay"/>
+                app:layout_collapseMode="pin"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -58,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Browse"
+                android:textColor="?android:attr/textColorPrimary"
                 style="@style/Widget.AppCompat.Button.Colored"/>
 
             <Button
@@ -67,6 +66,7 @@
                 android:layout_weight="1"
                 android:enabled="false"
                 android:text="Upload"
+                android:textColor="?android:attr/textColorPrimary"
                 style="@style/Widget.AppCompat.Button.Colored"/>
 
         </LinearLayout>
@@ -79,6 +79,7 @@
             android:layout_marginLeft="16dp"
             android:enabled="false"
             android:text="Submit"
+            android:textColor="?android:attr/textColorPrimary"
             style="@style/Widget.AppCompat.Button.Colored"/>
 
     </LinearLayout>

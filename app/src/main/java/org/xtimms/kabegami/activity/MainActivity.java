@@ -35,11 +35,11 @@ import org.xtimms.kabegami.Common;
 import org.xtimms.kabegami.R;
 import org.xtimms.kabegami.adapter.TabPagerAdapter;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.Arrays;
+import java.util.List;
 
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private ActionBarDrawerToggle toggle;
+public class MainActivity extends AppCompatActivity {
+
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -57,40 +57,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
-        navigationView = findViewById(R.id.nav_view);
-
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, 0, 0);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
 
         viewPager = findViewById(R.id.viewPager);
         TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(tabPagerAdapter);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.PhoneBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(),
+            startActivityForResult(AuthUI
+                            .getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .setTheme(R.style.Theme_Kabegami)
+                            .setLogo(R.mipmap.ic_launcher_round)
+                            .build(),
                     Common.SIGN_IN_REQUEST_CODE);
-        } else {
-            Snackbar.make(drawerLayout, new StringBuilder("Welcome ").append(FirebaseAuth.getInstance().getCurrentUser().getEmail()), Snackbar.LENGTH_SHORT).show();
         }
-        
-        loadUserInformation();
 
-    }
-
-    private void loadUserInformation() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            View headerLayout = navigationView.getHeaderView(0);
-            TextView email = headerLayout.findViewById(R.id.txt_email);
-            email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        }
     }
 
     @Override
@@ -98,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Common.SIGN_IN_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Snackbar.make(drawerLayout, new StringBuilder("Welcome ").append(FirebaseAuth.getInstance().getCurrentUser().getEmail()), Snackbar.LENGTH_SHORT).show();
 
                 if (ActivityCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -106,24 +95,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Common.PERMISSION_REQUEST_CODE);
                     }
                 }
-
-                Toolbar toolbar = findViewById(R.id.toolbar);
-                setSupportActionBar(toolbar);
-                drawerLayout = findViewById(R.id.drawer_layout);
-                toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
-                NavigationView navigationView = findViewById(R.id.nav_view);
-
-                toggle = new ActionBarDrawerToggle(this, drawerLayout, 0, 0);
-                drawerLayout.addDrawerListener(toggle);
-                toggle.syncState();
-
-                viewPager = findViewById(R.id.viewPager);
                 TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
                 viewPager.setAdapter(tabPagerAdapter);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setHomeButtonEnabled(true);
-
-                loadUserInformation();
             }
         }
     }
@@ -142,30 +115,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void enableTransparentStatusBar(@ColorRes int color) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = getWindow();
-            window.getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            if (color != 0) {
-                window.setStatusBarColor(ContextCompat.getColor(this, color));
-            }
-        }
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        toggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -180,17 +129,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_view_uploads) {
-
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
     }
 }

@@ -2,6 +2,7 @@ package org.xtimms.kabegami.holder;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ public class ListWallpaperViewHolder extends RecyclerView.ViewHolder implements 
     OnItemClickListener onItemClickListener;
 
     public ImageView wallpaper;
+    public ProgressBar progressBar;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
@@ -22,6 +24,7 @@ public class ListWallpaperViewHolder extends RecyclerView.ViewHolder implements 
     public ListWallpaperViewHolder(@NonNull View itemView) {
         super(itemView);
         wallpaper = itemView.findViewById(R.id.image);
+        progressBar = itemView.findViewById(R.id.progressBar);
         itemView.setOnClickListener(this);
     }
 

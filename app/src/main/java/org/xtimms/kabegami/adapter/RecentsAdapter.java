@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 
 import org.xtimms.kabegami.Common;
 import org.xtimms.kabegami.R;
-import org.xtimms.kabegami.activity.ListWallpaperActivity;
 import org.xtimms.kabegami.activity.ViewWallpaperActivity;
 import org.xtimms.kabegami.db.Recents;
 import org.xtimms.kabegami.holder.ListWallpaperViewHolder;
@@ -27,8 +26,8 @@ import java.util.List;
 
 public class RecentsAdapter extends RecyclerView.Adapter<ListWallpaperViewHolder> {
 
-    private Context context;
-    private List<Recents> recents;
+    private final Context context;
+    private final List<Recents> recents;
 
     public RecentsAdapter(Context context, List<Recents> recents) {
         this.context = context;
@@ -51,14 +50,14 @@ public class RecentsAdapter extends RecyclerView.Adapter<ListWallpaperViewHolder
                 .into(holder.wallpaper, new Callback() {
                     @Override
                     public void onSuccess() {
-
+                        holder.progressBar.setVisibility(View.GONE);
                     }
-
                     @Override
                     public void onError(Exception e) {
+                        holder.progressBar.setVisibility(View.GONE);
                         Picasso.get()
                                 .load(recents.get(position).getImageLink())
-                                .error(R.drawable.ic_baseline_error_outline_24)
+                                .error(R.drawable.ic_error)
                                 .into(holder.wallpaper, new Callback() {
                                     @Override
                                     public void onSuccess() {

@@ -14,13 +14,14 @@ import org.xtimms.kabegami.fragment.RecentsFragment;
 
 public class TabPagerAdapter extends FragmentPagerAdapter {
 
-    private Context context;
+    private final Context context;
 
     public TabPagerAdapter(@NonNull FragmentManager fm, Context context) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.context = context;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
@@ -29,9 +30,8 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
             return TrendingFragment.getInstance();
         } else if (position == 2) {
             return RecentsFragment.getInstance(context);
-        } else {
-            return null;
         }
+        return CategoryFragment.getInstance();
     }
 
     @Override

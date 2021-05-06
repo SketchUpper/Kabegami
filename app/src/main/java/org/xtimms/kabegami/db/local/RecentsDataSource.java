@@ -9,7 +9,7 @@ import io.reactivex.Flowable;
 
 public class RecentsDataSource implements IRecentsDataSource {
 
-    private RecentsDAO recentsDAO;
+    private final RecentsDAO recentsDAO;
     private static RecentsDataSource instance;
 
     public RecentsDataSource(RecentsDAO recentsDAO) {

@@ -2,6 +2,7 @@ package org.xtimms.kabegami.holder;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,8 +13,9 @@ import org.xtimms.kabegami.interfaces.OnItemClickListener;
 
 public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView category_name;
-    public ImageView background_image;
+    public TextView categoryName;
+    public ImageView backgroundImage;
+    public ProgressBar progressBar;
 
     OnItemClickListener onItemClickListener;
 
@@ -23,8 +25,9 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.
 
     public CategoryViewHolder(@NonNull View itemView) {
         super(itemView);
-        background_image = itemView.findViewById(R.id.image);
-        category_name = itemView.findViewById(R.id.name);
+        backgroundImage = itemView.findViewById(R.id.image);
+        categoryName = itemView.findViewById(R.id.name);
+        progressBar = itemView.findViewById(R.id.progressBar);
 
         itemView.setOnClickListener(this);
     }

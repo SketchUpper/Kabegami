@@ -2,18 +2,15 @@ package org.xtimms.kabegami.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -63,14 +60,14 @@ public class TrendingFragment extends Fragment {
                         .into(listWallpaperViewHolder.wallpaper, new Callback() {
                             @Override
                             public void onSuccess() {
-
+                                listWallpaperViewHolder.progressBar.setVisibility(View.GONE);
                             }
-
                             @Override
                             public void onError(Exception e) {
+                                listWallpaperViewHolder.progressBar.setVisibility(View.GONE);
                                 Picasso.get()
                                         .load(wallpaperItem.getImageLink())
-                                        .error(R.drawable.ic_baseline_error_outline_24)
+                                        .error(R.drawable.ic_error)
                                         .into(listWallpaperViewHolder.wallpaper, new Callback() {
                                             @Override
                                             public void onSuccess() {
@@ -84,15 +81,11 @@ public class TrendingFragment extends Fragment {
                                         });
                             }
                         });
-
-                listWallpaperViewHolder.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        Intent intent = new Intent(getActivity(), ViewWallpaperActivity.class);
-                        Common.selectBackground = wallpaperItem;
-                        Common.selectBackgroundKey = adapter.getRef(position).getKey();
-                        startActivity(intent);
-                    }
+                listWallpaperViewHolder.setOnItemClickListener((view, position) -> {
+                    Intent intent = new Intent(getActivity(), ViewWallpaperActivity.class);
+                    Common.selectBackground = wallpaperItem;
+                    Common.selectBackgroundKey = adapter.getRef(position).getKey();
+                    startActivity(intent);
                 });
             }
 

@@ -23,6 +23,6 @@ public class Common {
         return RetrofitClient.getClient(BASE_URL).create(IComputerVision.class);
     }
     public static String getAPIAdultEndPoint() {
-        return new StringBuilder(BASE_URL).append("analyze?visualFeatures=Adult&language=en").toString();
+        return BASE_URL + "analyze?visualFeatures=Adult&language=en";
     }
 }

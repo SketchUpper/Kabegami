@@ -2,16 +2,14 @@ package org.xtimms.kabegami.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.xtimms.kabegami.R;
 import org.xtimms.kabegami.adapter.RecentsAdapter;
@@ -24,10 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class RecentsFragment extends Fragment {
@@ -84,7 +80,7 @@ public class RecentsFragment extends Fragment {
         Disposable disposable = recentsRepository.getAllRecents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(recents -> onGetAllRecentsSuccess(recents), throwable -> Log.d("ERROR", throwable.getMessage()));
+                .subscribe(this::onGetAllRecentsSuccess, throwable -> Log.d("ERROR", throwable.getMessage()));
         compositeDisposable.add(disposable);
     }
 

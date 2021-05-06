@@ -17,7 +17,7 @@
             android:theme="@style/Theme.Kabegami.NoActionBar"/>
         <activity
             android:name=".activity.ViewWallpaperActivity"
-            android:theme="@style/Theme.Kabegami.NoActionBar" />
+            android:theme="@style/Theme.Kabegami.View" />
         <activity
             android:name=".activity.ListWallpaperActivity"
             android:theme="@style/Theme.Kabegami.NoActionBar" />

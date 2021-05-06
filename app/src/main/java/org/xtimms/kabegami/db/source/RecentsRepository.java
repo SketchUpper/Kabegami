@@ -8,7 +8,7 @@ import io.reactivex.Flowable;
 
 public class RecentsRepository implements IRecentsDataSource{
 
-    private IRecentsDataSource mLocalDataSource;
+    private final IRecentsDataSource mLocalDataSource;
     private static RecentsRepository instance;
 
     public RecentsRepository(IRecentsDataSource mLocalDataSource) {
